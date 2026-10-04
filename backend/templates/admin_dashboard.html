@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">Dashboard Overview</h3>
+
+<!-- Cards -->
+<div class="row">
+
+    <div class="col-md-4 d-flex">
+        <div class="card card-premium p-4 w-100">
+            <h5>Total Doctors</h5>
+            <h2 class="text-primary">{{ total_doctors }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 d-flex">
+        <div class="card card-premium p-4 w-100">
+            <h5>Total Users</h5>
+            <h2 class="text-success">{{ total_users }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4 d-flex">
+        <div class="card card-premium p-4 w-100">
+            <h5>Appointments</h5>
+            <h2 class="text-warning">{{ total_appointments }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<!-- Charts -->
+<div class="row mt-4">
+
+    <div class="col-md-6 d-flex">
+        <div class="card card-premium p-4 w-100">
+            <h5 class="mb-3">Users vs Doctors</h5>
+            <div style="height:350px;">
+                <canvas id="userDoctorChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 d-flex">
+        <div class="card card-premium p-4 w-100">
+            <h5 class="mb-3">Appointments Overview</h5>
+            <div style="height:350px;">
+                <canvas id="appointmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Bar Chart
+    new Chart(document.getElementById('userDoctorChart'), {
+        type: 'bar',
+        data: {
+            labels: ['Doctors', 'Users'],
+            datasets: [{
+                data: [{{ total_doctors }}, {{ total_users }}],
+                backgroundColor: ['#3b82f6', '#22c55e'],
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } }
+        }
+    });
+
+    // Pie Chart
+    new Chart(document.getElementById('appointmentChart'), {
+        type: 'pie',
+        data: {
+            labels: ['Appointments'],
+            datasets: [{
+                data: [{{ total_appointments }}],
+                backgroundColor: ['#f59e0b']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+{% endblock %}

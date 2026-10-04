@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Django
+*.sqlite3
+media/
+staticfiles/
+
+# Environment variables
+.env
+*.env
+
+# Flutter
+frontend/.dart_tool/
+frontend/build/
+frontend/.idea/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

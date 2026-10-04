@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">Doctor List</h3>
+
+<div class="card card-premium p-4">
+
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Department</th>
+                <th>Experience</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doctor in doctors %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ doctor.username }}</td>
+                <td>{{ doctor.email }}</td>
+                <td>{{ doctor.phone }}</td>
+
+                <!-- Doctor Profile -->
+                <td>{{ doctor.doctor_profile.department }}</td>
+                <td>{{ doctor.doctor_profile.experience_years }} yrs</td>
+
+                <td>{{ doctor.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No Doctors Found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

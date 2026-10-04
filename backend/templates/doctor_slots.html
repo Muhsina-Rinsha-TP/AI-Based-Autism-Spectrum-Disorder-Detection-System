@@ -1,0 +1,171 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<style>
+    .doctor-card {
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #f1f5f9;
+    }
+
+    .doctor-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 12px;
+        margin-bottom: 15px;
+    }
+
+    .doctor-name {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .doctor-email {
+        font-size: 13px;
+        color: #888;
+    }
+
+    /* DATE BUTTONS */
+    .date-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .date-btn {
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        font-size: 13px;
+        background: #f8fafc;
+    }
+
+    .date-btn.active {
+        background: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+    /* SLOT DESIGN */
+    .slot-box {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #eee;
+    }
+
+    .time-badge {
+        background: #3b82f6;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+    .available {
+        color: #16a34a;
+        font-weight: 600;
+    }
+
+    .booked {
+        color: #dc2626;
+        font-weight: 600;
+    }
+</style>
+
+<h3 class="mb-4 fw-bold">Doctor Availability</h3>
+
+<div class="row">
+
+{% for item in grouped_slots %}
+<div class="col-md-6 mb-4">
+
+    <div class="doctor-card p-4">
+
+        <!-- DOCTOR HEADER -->
+        <div class="doctor-header">
+            <div class="doctor-name">{{ item.doctor.username }}</div>
+            <div class="doctor-email">{{ item.doctor.email }}</div>
+        </div>
+
+        <!-- DATE ROW -->
+        <div class="date-row">
+            {% for date, slots in item.dates.items %}
+                <div class="date-btn {% if forloop.first %}active{% endif %}"
+                     onclick="showSlots('{{ forloop.counter }}_{{ item.doctor.id }}')">
+                    {{ date|date:"d M" }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- SLOT SECTIONS -->
+        {% for date, slots in item.dates.items %}
+        <div id="slots_{{ forloop.counter }}_{{ item.doctor.id }}"
+             class="slot-section"
+             style="{% if not forloop.first %}display:none{% endif %}">
+
+            <h6 class="mb-2 text-primary">
+                📅 {{ date|date:"d M Y" }}
+            </h6>
+
+            {% for slot in slots %}
+            <div class="slot-box d-flex justify-content-between align-items-center">
+
+                <div>
+                    <div class="time-badge">
+                        {{ slot.start_time|time:"h:i A" }} - {{ slot.end_time|time:"h:i A" }}
+                    </div>
+
+                    <small class="text-muted">
+                        Slot ID: {{ slot.id }}
+                    </small>
+                </div>
+
+                <div>
+                    {% if slot.is_booked %}
+                        <span class="booked">Booked</span>
+                    {% else %}
+                        <span class="available">Available</span>
+                    {% endif %}
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endfor %}
+
+</div>
+
+<!-- JS -->
+<script>
+function showSlots(id) {
+
+    // hide all slot sections
+    document.querySelectorAll('.slot-section').forEach(el => {
+        el.style.display = 'none';
+    });
+
+    // remove active from all buttons
+    document.querySelectorAll('.date-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    // show selected
+    document.getElementById('slots_' + id).style.display = 'block';
+
+    // set active button
+    event.target.classList.add('active');
+}
+</script>
+
+{% endblock %}

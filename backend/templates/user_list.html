@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">User List</h3>
+
+<div class="card card-premium p-4">
+
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No Users Found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

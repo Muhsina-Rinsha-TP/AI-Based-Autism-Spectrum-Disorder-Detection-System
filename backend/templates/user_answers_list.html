@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<style>
+    .user-card {
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        transition: 0.3s;
+        background: white;
+    }
+
+    .user-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    .answer-box {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    .answer-badge {
+        background: #22c55e;
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+    }
+
+    .user-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .empty-box {
+        text-align: center;
+        padding: 40px;
+        color: #777;
+    }
+</style>
+
+<h3 class="mb-4 fw-bold">User Answers</h3>
+
+<div class="row">
+
+    {% for user, answers in grouped_answers.items %}
+    <div class="col-md-6 mb-4">
+
+        <div class="user-card p-4 h-100">
+
+            <!-- USER HEADER -->
+            <div class="d-flex justify-content-between align-items-center user-header">
+
+                <div>
+                    <h5 class="mb-0">{{ user.username }}</h5>
+                    <small class="text-muted">{{ user.email }}</small>
+                </div>
+
+                <span class="badge bg-primary">
+                    {{ answers|length }} Answers
+                </span>
+
+            </div>
+
+            <!-- ANSWERS -->
+            {% for item in answers %}
+            <div class="answer-box mb-3">
+
+                <p class="mb-2 fw-semibold">
+                    {{ forloop.counter }}. {{ item.question.text }}
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <span class="answer-badge">
+                        {{ item.option.text }}
+                    </span>
+
+                    <small class="text-muted">
+                        {{ item.created_at|date:"d M Y H:i" }}
+                    </small>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+    {% empty %}
+
+    <div class="col-12">
+        <div class="card card-premium empty-box">
+            <h5>No answers submitted yet</h5>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
